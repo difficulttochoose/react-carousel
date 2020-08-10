@@ -1,6 +1,17 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Slide, { slidePropType } from "./Slide";
+import styles from "./Slider.module.scss";
+import classNames from "classnames";
+import Icon from "@mdi/react";
+import {
+  mdiFullscreenExit,
+  mdiFullscreen,
+  mdiPlay,
+  mdiPause,
+  mdiChevronRight,
+  mdiChevronLeft,
+} from "@mdi/js";
 
 class Slider extends Component {
   constructor(props) {
@@ -8,76 +19,141 @@ class Slider extends Component {
 
     this.state = {
       currentIndex: 0,
+      isRunning: false,
+      value: 1000,
     };
+    this.timeoutId = null;
   }
+
+  clear = () => {
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId);
+      this.timeoutId = null;
+      this.value = 1000;
+    }
+  };
+
   prev = () => {
-    this.setState({
-      currentIndex:
-        this.currentIndex === 0
-          ? this.props.slides.length - 1
-          : this.currentIndex - 1,
+    this.setState((state, props) => {
+      return {
+        currentIndex:
+          state.currentIndex === 0
+            ? this.props.slides.length - 1
+            : state.currentIndex - 1,
+      };
     });
   };
+
   next = () => {
-    this.setState({
-      currentIndex:
-        this.currentIndex === this.props.slides.length - 1
-          ? 0
-          : this.currentIndex + 1,
+    this.setState((state, props) => {
+      return {
+        currentIndex:
+          state.currentIndex === this.props.slides.length - 1
+            ? 0
+            : state.currentIndex + 1,
+      };
     });
+  };
+
+  handleChange = (event) => {
+    this.setState({ value: event.target.value });
+  };
+
+  handleSubmit(event) {
+    event.preventDefault();
+  }
+
+  componentDidMount() {
+    this.setState({
+      isRunning: true,
+    });
+  }
+
+  componentDidUpdate() {
+    const { isRunning, value } = this.state;
+    this.clear();
+    if (isRunning) {
+      this.timeoutId = setTimeout(this.next, value);
+    }
+  }
+
+  componentWillUnmount() {
+    this.clear();
+  }
+
+  switch = () => {
+    const { isRunning } = this.state;
+    this.setState({
+      isRunning: isRunning ? false : true,
+    });
+  };
+
+  fullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.getElementById("root").requestFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
   };
 
   render() {
-    console.log("props slides", this.props.slides);
+    const { currentIndex, value, isRunning } = this.state;
     return (
-      <article>
-        {this.props.slides.map((s) => (
-          <Slide slide={s} />
-        ))}
-        {/* <Slide slide={this.props.slides[this.currentIndex]} /> */}
-        <button onClick={this.prev}>PREV</button>
-        <button onClick={this.next}>NEXT</button>
-      </article>
+      <div
+        className={classNames(styles.container, {
+          [styles.fullScreenContainer]: document.fullscreenElement,
+        })}
+      >
+        <Slide slide={this.props.slides[currentIndex]} />
+        <Icon
+          onClick={this.prev}
+          className={classNames(styles.icon, styles.clickPrev)}
+          path={mdiChevronLeft}
+          alt="Previous slide"
+          title="Previous slide"
+        />
+        <Icon
+          onClick={this.next}
+          className={classNames(styles.icon, styles.clickNext)}
+          path={mdiChevronRight}
+          alt="Next slide"
+          title="Next slide"
+        />
+        <div className={classNames(styles.flexContainer)}>
+          <Icon
+            onClick={this.switch}
+            className={classNames(styles.icon, styles.slideShowBut)}
+            path={!isRunning ? mdiPlay : mdiPause}
+            alt={!isRunning ? "Play" : "Pause"}
+            title={!isRunning ? "Play" : "Pause"}
+          />
+          <form
+            onSubmit={this.handleSubmit}
+            className={classNames(styles.slideShowSpeed)}
+          >
+            DELAY
+            <input
+              type="range"
+              min="1"
+              max="5000"
+              value={value}
+              onChange={this.handleChange}
+            />
+          </form>
+          <Icon
+            onClick={this.fullScreen}
+            className={classNames(styles.icon, styles.fullScreenBut)}
+            path={
+              document.fullscreenElement ? mdiFullscreenExit : mdiFullscreen
+            }
+            alt="Full screen"
+            title="Full screen"
+          />
+        </div>
+      </div>
     );
   }
 }
-
-// class Slider extends Component {
-// constructor(props) {
-//   super(props)
-
-//   this.state = {
-//      currentIndex: 0,
-//   }
-// }
-
-//   // const { slides } = props;
-//   console.log('slides', this.props.slides);
-//   slides.map(s => console.log('s', s));
-//   const
-// const prev = () => {
-//   let index = currentIndex === 0 ? slides.length - 1 : currentIndex - 1;
-//   console.log(`prev ${index}`);
-//   return slides[index];
-// };
-// const next = () => {
-//   let index = currentIndex === slides.length - 1 ? 0 : currentIndex + 1;
-//   console.log(`next ${index}`);
-//   return slides[index];
-// };
-//   render(){
-//     return (
-// <article>
-//   {slides.map(s => (
-//     <Slide slide={s} />
-//   ))}
-//   <button onClick={prev}>PREV</button>
-//   <button onClick={next}>NEXT</button>
-// </article>
-//   )
-//   }
-
-// };
 
 Slider.propTypes = {
   slides: PropTypes.arrayOf(slidePropType),

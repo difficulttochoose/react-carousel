@@ -1,0 +1,36 @@
+@import "../reset.css";
+
+.fullScreenContainer {
+  width: 150vh !important;
+  height: 100vh !important;
+}
+.container {
+  position: relative;
+  margin: auto;
+  width: 600px;
+  height: 400px;
+  & > * {
+    position: absolute;
+    color: white;
+    align-items: center;
+  }
+}
+.icon {
+  width: 30px;
+  height: 30px;
+  color: silver;
+  cursor: pointer;
+}
+.clickNext {
+  right: 0;
+  top: 50%;
+}
+.clickPrev {
+  left: 0;
+  top: 50%;
+}
+.flexContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
