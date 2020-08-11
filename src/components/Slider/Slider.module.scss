@@ -1,5 +1,13 @@
 @import "../reset.css";
 
+$icon-size: 30px;
+
+%flexContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .fullScreenContainer {
   width: 150vh !important;
   height: 100vh !important;
@@ -15,22 +23,25 @@
     align-items: center;
   }
 }
+.switchSlidesButtons {
+  top: 50%;
+}
 .icon {
-  width: 30px;
-  height: 30px;
+  width: $icon-size;
+  height: $icon-size;
   color: silver;
   cursor: pointer;
 }
-.clickNext {
-  right: 0;
-  top: 50%;
-}
-.clickPrev {
-  left: 0;
-  top: 50%;
-}
 .flexContainer {
-  width: 100%;
+  @extend %flexContainer;
+}
+.slideShowSpeed {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+}
+.settings {
+  display: none;
+}
+.container:hover .settings {
+  @extend %flexContainer;
 }

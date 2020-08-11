@@ -105,24 +105,32 @@ class Slider extends Component {
         })}
       >
         <Slide slide={this.props.slides[currentIndex]} />
-        <Icon
-          onClick={this.prev}
-          className={classNames(styles.icon, styles.clickPrev)}
-          path={mdiChevronLeft}
-          alt="Previous slide"
-          title="Previous slide"
-        />
-        <Icon
-          onClick={this.next}
-          className={classNames(styles.icon, styles.clickNext)}
-          path={mdiChevronRight}
-          alt="Next slide"
-          title="Next slide"
-        />
-        <div className={classNames(styles.flexContainer)}>
+        <div
+          className={classNames(
+            styles.flexContainer,
+            styles.settings,
+            styles.switchSlidesButtons
+          )}
+        >
+          <Icon
+            onClick={this.prev}
+            className={classNames(styles.icon)}
+            path={mdiChevronLeft}
+            alt="Previous slide"
+            title="Previous slide"
+          />
+          <Icon
+            onClick={this.next}
+            className={classNames(styles.icon)}
+            path={mdiChevronRight}
+            alt="Next slide"
+            title="Next slide"
+          />
+        </div>
+        <div className={classNames(styles.flexContainer, styles.settings)}>
           <Icon
             onClick={this.switch}
-            className={classNames(styles.icon, styles.slideShowBut)}
+            className={classNames(styles.icon)}
             path={!isRunning ? mdiPlay : mdiPause}
             alt={!isRunning ? "Play" : "Pause"}
             title={!isRunning ? "Play" : "Pause"}
@@ -131,7 +139,7 @@ class Slider extends Component {
             onSubmit={this.handleSubmit}
             className={classNames(styles.slideShowSpeed)}
           >
-            DELAY
+            Delay
             <input
               type="range"
               min="1"
@@ -139,10 +147,11 @@ class Slider extends Component {
               value={value}
               onChange={this.handleChange}
             />
+            {value}
           </form>
           <Icon
             onClick={this.fullScreen}
-            className={classNames(styles.icon, styles.fullScreenBut)}
+            className={classNames(styles.icon)}
             path={
               document.fullscreenElement ? mdiFullscreenExit : mdiFullscreen
             }

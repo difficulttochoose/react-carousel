@@ -3,21 +3,26 @@
 .wrapper {
   position: relative;
 }
-.description {
+.descriptionWrapper {
   position: absolute;
   bottom: 0;
   right: 0;
   left: 0;
   background-color: #0000008f;
   padding: 15px;
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  text-align: center;
-  color: white;
+  & > * {
+    text-align: center;
+    color: white;
+  }
+}
+.description {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+}
+.descriptionTitle {
+  font-size: larger;
+  line-height: 2em;
 }
