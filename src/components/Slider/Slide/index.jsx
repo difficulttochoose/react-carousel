@@ -8,7 +8,7 @@ function Slide(props) {
     slide: { src, description, title },
   } = props;
   return (
-    <figure className={styles.wrapper}>
+    <figure className={classNames(styles.wrapper)}>
       <img src={src} alt={title} style={{ width: "100%", height: "100%" }} />
       <figcaption className={classNames(styles.descriptionWrapper)}>
         <div className={classNames(styles.descriptionTitle)}>{title}</div>

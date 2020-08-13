@@ -16,7 +16,6 @@ import {
 class Slider extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       currentIndex: 0,
       isRunning: false,
@@ -171,4 +170,5 @@ Slider.propTypes = {
 Slider.defaultProps = {
   slides: [],
 };
+
 export default Slider;
