@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import Slide, { slidePropType } from "./Slide";
-import styles from "./Slider.module.scss";
-import classNames from "classnames";
-import Icon from "@mdi/react";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Slide, { slidePropType } from './Slide';
+import styles from './Slider.module.scss';
+import classNames from 'classnames';
+import Icon from '@mdi/react';
 import {
   mdiFullscreenExit,
   mdiFullscreen,
@@ -11,7 +11,7 @@ import {
   mdiPause,
   mdiChevronRight,
   mdiChevronLeft,
-} from "@mdi/js";
+} from '@mdi/js';
 
 class Slider extends Component {
   constructor(props) {
@@ -28,39 +28,30 @@ class Slider extends Component {
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);
       this.timeoutId = null;
-      this.value = 1000;
     }
   };
 
+  setCurrentIndex = v => this.setState({ currentIndex: v });
+
   prev = () => {
-    this.setState((state, props) => {
-      return {
-        currentIndex:
-          state.currentIndex === 0
-            ? this.props.slides.length - 1
-            : state.currentIndex - 1,
-      };
-    });
+    const { currentIndex } = this.state;
+    const {
+      slides: { length },
+    } = this.props;
+    this.setCurrentIndex((currentIndex - 1 + length) % length);
   };
 
   next = () => {
-    this.setState((state, props) => {
-      return {
-        currentIndex:
-          state.currentIndex === this.props.slides.length - 1
-            ? 0
-            : state.currentIndex + 1,
-      };
-    });
+    const { currentIndex } = this.state;
+    const {
+      slides: { length },
+    } = this.props;
+    this.setCurrentIndex((currentIndex + 1) % length);
   };
 
-  handleChange = (event) => {
-    this.setState({ value: event.target.value });
+  handleChange = ({ target: { value } }) => {
+    this.setState({ value });
   };
-
-  handleSubmit(event) {
-    event.preventDefault();
-  }
 
   componentDidMount() {
     this.setState({
@@ -83,13 +74,13 @@ class Slider extends Component {
   switch = () => {
     const { isRunning } = this.state;
     this.setState({
-      isRunning: isRunning ? false : true,
+      isRunning: !isRunning,
     });
   };
 
   fullScreen = () => {
     if (!document.fullscreenElement) {
-      document.getElementById("root").requestFullscreen();
+      document.getElementById('root').requestFullscreen();
     } else {
       document.exitFullscreen();
     }
@@ -97,12 +88,11 @@ class Slider extends Component {
 
   render() {
     const { currentIndex, value, isRunning } = this.state;
+    const containerClassName = classNames(styles.container, {
+      [styles.fullScreenContainer]: document.fullscreenElement,
+    });
     return (
-      <div
-        className={classNames(styles.container, {
-          [styles.fullScreenContainer]: document.fullscreenElement,
-        })}
-      >
+      <div className={containerClassName}>
         <Slide slide={this.props.slides[currentIndex]} />
         <div
           className={classNames(
@@ -113,14 +103,14 @@ class Slider extends Component {
         >
           <Icon
             onClick={this.prev}
-            className={classNames(styles.icon)}
+            className={styles.icon}
             path={mdiChevronLeft}
             alt="Previous slide"
             title="Previous slide"
           />
           <Icon
             onClick={this.next}
-            className={classNames(styles.icon)}
+            className={styles.icon}
             path={mdiChevronRight}
             alt="Next slide"
             title="Next slide"
@@ -129,15 +119,12 @@ class Slider extends Component {
         <div className={classNames(styles.flexContainer, styles.settings)}>
           <Icon
             onClick={this.switch}
-            className={classNames(styles.icon)}
+            className={styles.icon}
             path={!isRunning ? mdiPlay : mdiPause}
-            alt={!isRunning ? "Play" : "Pause"}
-            title={!isRunning ? "Play" : "Pause"}
+            alt={!isRunning ? 'Play' : 'Pause'}
+            title={!isRunning ? 'Play' : 'Pause'}
           />
-          <form
-            onSubmit={this.handleSubmit}
-            className={classNames(styles.slideShowSpeed)}
-          >
+          <div className={styles.slideShowSpeed}>
             Delay
             <input
               type="range"
@@ -147,10 +134,10 @@ class Slider extends Component {
               onChange={this.handleChange}
             />
             {value}
-          </form>
+          </div>
           <Icon
             onClick={this.fullScreen}
-            className={classNames(styles.icon)}
+            className={styles.icon}
             path={
               document.fullscreenElement ? mdiFullscreenExit : mdiFullscreen
             }
