@@ -1,7 +1,13 @@
-@import "../../reset.css";
+@import '../../../reset.css';
 
-.wrapper {
-  position: relative;
+.slideWrapper {
+  width: 100%;
+  height: inherit;
+  display: flex;
+  justify-content: center;
+}
+.slideImage {
+  height: inherit;
 }
 .descriptionWrapper {
   position: absolute;

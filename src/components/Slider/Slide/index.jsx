@@ -1,18 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styles from "./Slide.module.scss";
-import classNames from "classnames";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styles from './Slide.module.scss';
 
 function Slide(props) {
   const {
     slide: { src, description, title },
   } = props;
   return (
-    <figure className={classNames(styles.wrapper)}>
-      <img src={src} alt={title} style={{ width: "100%", height: "100%" }} />
-      <figcaption className={classNames(styles.descriptionWrapper)}>
-        <div className={classNames(styles.descriptionTitle)}>{title}</div>
-        <div className={classNames(styles.description)}>{description}</div>
+    <figure className={styles.slideWrapper}>
+      <img src={src} alt={title} className={styles.slideImage} />
+      <figcaption className={styles.descriptionWrapper}>
+        <div className={styles.descriptionTitle}>{title}</div>
+        <div className={styles.description}>{description}</div>
       </figcaption>
     </figure>
   );

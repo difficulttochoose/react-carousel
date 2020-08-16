@@ -3,15 +3,7 @@ import PropTypes from 'prop-types';
 import Slide, { slidePropType } from './Slide';
 import styles from './Slider.module.scss';
 import classNames from 'classnames';
-import Icon from '@mdi/react';
-import {
-  mdiFullscreenExit,
-  mdiFullscreen,
-  mdiPlay,
-  mdiPause,
-  mdiChevronRight,
-  mdiChevronLeft,
-} from '@mdi/js';
+import Controls from './Controls';
 
 class Slider extends Component {
   constructor(props) {
@@ -19,6 +11,7 @@ class Slider extends Component {
     this.state = {
       currentIndex: 0,
       isRunning: false,
+      isFullScreen: false,
       value: 1000,
     };
     this.timeoutId = null;
@@ -79,72 +72,30 @@ class Slider extends Component {
   };
 
   fullScreen = () => {
-    if (!document.fullscreenElement) {
-      document.getElementById('root').requestFullscreen();
-    } else {
-      document.exitFullscreen();
-    }
+    const { isFullScreen } = this.state;
+    this.setState({
+      isFullScreen: !isFullScreen,
+    });
   };
 
   render() {
-    const { currentIndex, value, isRunning } = this.state;
+    const { currentIndex, value, isRunning, isFullScreen } = this.state;
     const containerClassName = classNames(styles.container, {
-      [styles.fullScreenContainer]: document.fullscreenElement,
+      [styles.fullScreenContainer]: isFullScreen,
     });
     return (
       <div className={containerClassName}>
         <Slide slide={this.props.slides[currentIndex]} />
-        <div
-          className={classNames(
-            styles.flexContainer,
-            styles.settings,
-            styles.switchSlidesButtons
-          )}
-        >
-          <Icon
-            onClick={this.prev}
-            className={styles.icon}
-            path={mdiChevronLeft}
-            alt="Previous slide"
-            title="Previous slide"
-          />
-          <Icon
-            onClick={this.next}
-            className={styles.icon}
-            path={mdiChevronRight}
-            alt="Next slide"
-            title="Next slide"
-          />
-        </div>
-        <div className={classNames(styles.flexContainer, styles.settings)}>
-          <Icon
-            onClick={this.switch}
-            className={styles.icon}
-            path={!isRunning ? mdiPlay : mdiPause}
-            alt={!isRunning ? 'Play' : 'Pause'}
-            title={!isRunning ? 'Play' : 'Pause'}
-          />
-          <div className={styles.slideShowSpeed}>
-            Delay
-            <input
-              type="range"
-              min="1"
-              max="5000"
-              value={value}
-              onChange={this.handleChange}
-            />
-            {value}
-          </div>
-          <Icon
-            onClick={this.fullScreen}
-            className={styles.icon}
-            path={
-              document.fullscreenElement ? mdiFullscreenExit : mdiFullscreen
-            }
-            alt="Full screen"
-            title="Full screen"
-          />
-        </div>
+        <Controls
+          sliderSpeed={value}
+          isRunning={isRunning}
+          isFullScreen={isFullScreen}
+          fullScreen={this.fullScreen}
+          handleChange={this.handleChange}
+          switchSlides={this.switch}
+          next={this.next}
+          prev={this.prev}
+        />
       </div>
     );
   }

@@ -1,4 +1,4 @@
-@import "../reset.css";
+@import '../../reset.css';
 
 $icon-size: 30px;
 
@@ -9,7 +9,7 @@ $icon-size: 30px;
 }
 
 .fullScreenContainer {
-  width: 150vh !important;
+  width: auto !important;
   height: 100vh !important;
 }
 .container {
@@ -17,10 +17,10 @@ $icon-size: 30px;
   margin: auto;
   width: 600px;
   height: 400px;
+  color: white;
+  background: black;
   & > * {
     position: absolute;
-    color: white;
-    align-items: center;
   }
 }
 .switchSlidesButtons {
@@ -37,7 +37,8 @@ $icon-size: 30px;
 }
 .slideShowSpeed {
   display: flex;
-  align-items: center;
+  align-self: center;
+  width: 200px;
 }
 .settings {
   display: none;
